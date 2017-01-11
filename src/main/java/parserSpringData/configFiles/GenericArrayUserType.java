@@ -14,8 +14,8 @@ import java.sql.*;
 
 public class GenericArrayUserType<T extends Serializable> implements UserType {
 
-    protected static final int[] SQL_TYPES = { Types.ARRAY };
-    private  Class<T> typeParameterClass;
+    protected static final int[] SQL_TYPES = {Types.ARRAY};
+    private Class<T> typeParameterClass;
 
     @Override
     public Object assemble(Serializable cached, Object owner) throws HibernateException {
@@ -94,6 +94,6 @@ public class GenericArrayUserType<T extends Serializable> implements UserType {
 
     @Override
     public int[] sqlTypes() {
-        return new int[] { Types.ARRAY };
+        return new int[]{Types.ARRAY};
     }
 }

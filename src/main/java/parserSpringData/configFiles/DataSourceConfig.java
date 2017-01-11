@@ -11,11 +11,10 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
 
-
 @Configuration
-@PropertySource(value = { "classpath:application.properties" })
+@PropertySource(value = {"classpath:application.properties"})
 @Component
-public class DataSourceConfig{
+public class DataSourceConfig {
 
     @Value("${spring.datasource.url}")
     private String connectionUrl;
@@ -32,7 +31,7 @@ public class DataSourceConfig{
     @Bean
     public DataSource dataSource() {
 
-        DriverManagerDataSource dataSourceConfig =  new DriverManagerDataSource();
+        DriverManagerDataSource dataSourceConfig = new DriverManagerDataSource();
         dataSourceConfig.setDriverClassName(driverClass);
         dataSourceConfig.setUrl(connectionUrl);
         dataSourceConfig.setUsername(username);

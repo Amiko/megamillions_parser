@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "draw_result")
-public class DrawResult implements Serializable{
+public class DrawResult implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

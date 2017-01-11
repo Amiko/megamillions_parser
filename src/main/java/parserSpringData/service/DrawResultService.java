@@ -30,11 +30,12 @@ public class DrawResultService {
     PrizeBreakDownService prizeBreakDownService;
 
     public void getDrawResult() throws IOException {
+        //Navigate on last 25 drawings result table.
+        Document doc = Jsoup.connect("http://www.megamillions.com/winning-numbers/last-25-drawings").get();
+        Element tableBody = doc.getElementsByTag("tbody").first();
+        Elements rows = tableBody.getElementsByTag("tr");
 
-        Document dateForDrawing = Jsoup.connect("http://www.megamillions.com/winning-numbers/last-25-drawings").get();
-        Element table = dateForDrawing.getElementsByTag("tbody").first();
-        Elements rows = table.getElementsByTag("tr");
-
+        //Loop through to parse column values.
         for (Element row : rows) {
 
             List<Integer> ballNumber = new ArrayList<>();
@@ -43,11 +44,13 @@ public class DrawResultService {
             Date drawDates = new Date(drawDatesForLotto);
             Integer megaBall = new Integer(row.getElementsByClass("mega").first().html());
             Integer megaPlier = Integer.parseInt(row.getElementsByClass("mega").last().html());
+
+            //Parsed URL to pass into getPrizeBreakDown method.
             Element link = row.select("a").first();
             String parsedURL = link.attr("href");
             String url = "http://www.megamillions.com" + parsedURL;
 
-
+            //Nested loop to parse column "Balls" values.
             for (Element rowNumber : numberTr) {
 
                 Integer numbers = new Integer(rowNumber.getElementsByClass("number").html());
@@ -56,15 +59,15 @@ public class DrawResultService {
 
             Integer[] ballNumberSet = convertArray(ballNumber);
 
-            DrawResult drawResult = new DrawResult(drawDates, ballNumberSet, megaBall,megaPlier);
-
+            //Save Iterated results and pass parameters to getPrizeBreakDown
+            DrawResult drawResult = new DrawResult(drawDates, ballNumberSet, megaBall, megaPlier);
             drawResultRepository.save(drawResult);
             prizeBreakDownService.getPrizeBreakDown(url, drawResult);
 
         }
     }
 
-    public Integer[]convertArray(List<Integer> ballSet) {
+    public Integer[] convertArray(List<Integer> ballSet) {
 
         Integer[] ballNumberSet = new Integer[ballSet.size()];
         ballNumberSet = ballSet.toArray(ballNumberSet);
