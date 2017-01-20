@@ -12,7 +12,7 @@ import parserSpringData.repo.DrawResultRepository;
 
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,49 +29,71 @@ public class DrawResultService {
     @Autowired
     PrizeBreakDownService prizeBreakDownService;
 
-    public void getDrawResult() throws IOException {
-        //Navigate on last 25 drawings result table.
-        Document doc = Jsoup.connect("http://www.megamillions.com/winning-numbers/last-25-drawings").get();
-        Element tableBody = doc.getElementsByTag("tbody").first();
-        Elements rows = tableBody.getElementsByTag("tr");
 
+
+    public void getDrawResult() throws IOException {
+        Elements rows = getTableRows();
         //Loop through to parse column values.
         for (Element row : rows) {
 
-            List<Integer> ballNumber = new ArrayList<>();
-            Elements numberTr = row.getElementsByClass("number");
-            String drawDatesForLotto = row.getElementsByClass("dates").html();
-            Date drawDates = new Date(drawDatesForLotto);
-            Integer megaBall = new Integer(row.getElementsByClass("mega").first().html());
-            Integer megaPlier = Integer.parseInt(row.getElementsByClass("mega").last().html());
-
-            //Parsed URL to pass into getPrizeBreakDown method.
-            Element link = row.select("a").first();
-            String parsedURL = link.attr("href");
-            String url = "http://www.megamillions.com" + parsedURL;
-
-            //Nested loop to parse column "Balls" values.
-            for (Element rowNumber : numberTr) {
-
-                Integer numbers = new Integer(rowNumber.getElementsByClass("number").html());
-                ballNumber.add(numbers);
-            }
-
-            Integer[] ballNumberSet = convertArray(ballNumber);
-
+            DrawResult drawResult = parsesDrawResult(row);
+            String url = parsesURLForPrizeBreakDown(row);
             //Save Iterated results and pass parameters to getPrizeBreakDown
-            DrawResult drawResult = new DrawResult(drawDates, ballNumberSet, megaBall, megaPlier);
             drawResultRepository.save(drawResult);
             prizeBreakDownService.getPrizeBreakDown(url, drawResult);
 
         }
     }
 
-    public Integer[] convertArray(List<Integer> ballSet) {
+    //Parsed URL to pass into getPrizeBreakDown method.
+    private String parsesURLForPrizeBreakDown(Element row) {
+
+        Element link = row.select("a").first();
+        String parsedURL = link.attr("href");
+        String url = "http://www.megamillions.com" + parsedURL;
+
+        return url;
+    }
+
+    private DrawResult parsesDrawResult(Element row){
+
+        Elements numberTr = row.getElementsByClass("number");
+        String drawDatesForLotto = row.getElementsByClass("dates").html();
+        Date drawDates = new Date(drawDatesForLotto);
+        Integer megaBall = new Integer(row.getElementsByClass("mega").first().html());
+        Integer megaPlier = Integer.parseInt(row.getElementsByClass("mega").last().html());
+
+
+        List<Integer> ballNumbers = getBallNumberList(numberTr);
+        Integer[] ballNumberSet = convertArray(ballNumbers);
+
+        return new DrawResult(drawDates, ballNumberSet, megaBall, megaPlier);
+    }
+
+    //Nested loop to parse column "Balls" values.
+    private List<Integer> getBallNumberList(Elements numberTr) {
+        List<Integer> ballNumber = new ArrayList<>();
+        for (Element rowNumber : numberTr) {
+            Integer numbers = new Integer(rowNumber.getElementsByClass("number").html());
+            ballNumber.add(numbers);
+        }
+        return ballNumber;
+    }
+
+    private Integer[] convertArray(List<Integer> ballSet) {
 
         Integer[] ballNumberSet = new Integer[ballSet.size()];
         ballNumberSet = ballSet.toArray(ballNumberSet);
 
         return ballNumberSet;
+    }
+
+    //Navigate on last 25 drawings result table.
+    private Elements getTableRows() throws IOException {
+        Document doc = Jsoup.connect("http://www.megamillions.com/winning-numbers/last-25-drawings").get();
+        Element tableBody = doc.getElementsByTag("tbody").first();
+        Elements rows = tableBody.getElementsByTag("tr");
+
+        return rows;
     }
 }
