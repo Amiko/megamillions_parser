@@ -12,7 +12,6 @@ import parserSpringData.repo.DrawResultRepository;
 
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +26,7 @@ public class DrawResultService {
     @Autowired
     DataSourceConfig dataSourceConfig;
     @Autowired
-    PrizeBreakDownService prizeBreakDownService;
+    PrizeBreakdownService prizeBreakdownService;
 
 
 
@@ -38,14 +37,15 @@ public class DrawResultService {
 
             DrawResult drawResult = parsesDrawResult(row);
             String url = parsesURLForPrizeBreakDown(row);
-            //Save Iterated results and pass parameters to getPrizeBreakDown
+            //Save Iterated results and pass parameters to getPrizeBreakdown
             drawResultRepository.save(drawResult);
-            prizeBreakDownService.getPrizeBreakDown(url, drawResult);
+            prizeBreakdownService.getPrizeBreakdown(url, drawResult);
 
         }
+
     }
 
-    //Parsed URL to pass into getPrizeBreakDown method.
+    //Parsed URL to pass into getPrizeBreakdown method.
     private String parsesURLForPrizeBreakDown(Element row) {
 
         Element link = row.select("a").first();

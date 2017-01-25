@@ -21,13 +21,13 @@ import java.util.List;
  */
 
 @Service
-public class PrizeBreakDownService {
+public class PrizeBreakdownService {
 
     @Autowired
     private
     PrizeBreakDownRepository prizeBreakDownRepository;
 
-    public void getPrizeBreakDown(String url, DrawResult drawResult) throws IOException {
+    public void getPrizeBreakdown(String url, DrawResult drawResult) throws IOException {
 
         Document doc = Jsoup.connect(url).get();
 
