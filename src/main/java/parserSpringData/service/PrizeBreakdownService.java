@@ -7,9 +7,9 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import parserSpringData.entity.DrawResult;
-import parserSpringData.entity.PrizeBreakDown;
+import parserSpringData.entity.PrizeBreakdown;
 
-import parserSpringData.repo.PrizeBreakDownRepository;
+import parserSpringData.repo.PrizeBreakdownRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,20 +24,19 @@ import java.util.List;
 public class PrizeBreakdownService {
 
     @Autowired
-    private
-    PrizeBreakDownRepository prizeBreakDownRepository;
+    private PrizeBreakdownRepository prizeBreakdownRepository;
 
     public void getPrizeBreakdown(String url, DrawResult drawResult) throws IOException {
 
         Document doc = Jsoup.connect(url).get();
 
-        PrizeBreakDown jackpotResult = getJackpotResults(doc, drawResult);
-        prizeBreakDownRepository.save(jackpotResult);
+        PrizeBreakdown jackpotResult = getJackpotResults(doc, drawResult);
+        prizeBreakdownRepository.save(jackpotResult);
 
-        List<PrizeBreakDown> prizeBreakdown = getBreakDownResults(doc,drawResult);
-        prizeBreakDownRepository.save(prizeBreakdown);
+        List<PrizeBreakdown> prizeBreakdown = getBreakdownResults(doc,drawResult);
+        prizeBreakdownRepository.save(prizeBreakdown);
     }
-    private PrizeBreakDown getJackpotResults(Document doc, DrawResult drawResult) {
+    private PrizeBreakdown getJackpotResults(Document doc, DrawResult drawResult) {
 
         Elements tableForJacpot = getTableForJackpot(doc);
         //Parse Jackpot results.
@@ -45,7 +44,7 @@ public class PrizeBreakdownService {
         Integer tdJackpotWinner = Integer.parseInt(tableForJacpot.get(1).html());
         Long jackPotPrize = Long.parseLong(tableForJacpot.get(2).html().replaceAll("[^\\d.]+",""));
 
-        PrizeBreakDown jackpot = new PrizeBreakDown(tdMatch,tdJackpotWinner,jackPotPrize, 0, 0L, drawResult );
+        PrizeBreakdown jackpot = new PrizeBreakdown(tdMatch,tdJackpotWinner,jackPotPrize, 0, 0L, drawResult );
         return jackpot;
     }
 
@@ -57,9 +56,9 @@ public class PrizeBreakdownService {
         return tbodyForJackpot;
     }
 
-    private List<PrizeBreakDown> getBreakDownResults(Document doc, DrawResult drawResult) {
-        List<PrizeBreakDown> prizeBreakdown = new ArrayList<>();
-        Elements trTags = getTableForBreakDown(doc);
+    private List<PrizeBreakdown> getBreakdownResults(Document doc, DrawResult drawResult) {
+        List<PrizeBreakdown> prizeBreakdown = new ArrayList<>();
+        Elements trTags = getTableForBreakdown(doc);
         for(Element row: trTags) {
 
             String match = row.getElementsByTag("td").get(0).html();
@@ -69,12 +68,12 @@ public class PrizeBreakdownService {
             Long megaplierAmount = Long.parseLong(row.getElementsByTag("td").get(4).html().replaceAll("[^\\d.]+", ""));
 
             //Save each Iterated Result.
-            prizeBreakdown.add(new PrizeBreakDown(match, winners, prizeAmount, megaplierWinners, megaplierAmount,drawResult));
+            prizeBreakdown.add(new PrizeBreakdown(match, winners, prizeAmount, megaplierWinners, megaplierAmount,drawResult));
         }
         return prizeBreakdown;
     }
 
-    private Elements getTableForBreakDown(Document doc) {
+    private Elements getTableForBreakdown(Document doc) {
         //Navigate on HTML for Prize Breakdown Table.
         Element tableForBreakDown = doc.getElementsByTag("tbody").last();
         Elements trTags = tableForBreakDown.getElementsByTag("tr");

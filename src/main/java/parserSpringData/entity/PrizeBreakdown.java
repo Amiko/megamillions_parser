@@ -8,7 +8,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name= "prize_break_down")
-public class PrizeBreakDown {
+public class PrizeBreakdown {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +30,10 @@ public class PrizeBreakDown {
     @JoinColumn(name = "drawresult_id", referencedColumnName = "drawresult_id")
     private DrawResult drawResult;
 
-    public PrizeBreakDown() {
+    public PrizeBreakdown() {
     }
 
-    public PrizeBreakDown( String match, Integer winner, Long prizeAmount, Integer megaplierWinners, Long megaplierAmount, DrawResult drawResult) {
+    public PrizeBreakdown(String match, Integer winner, Long prizeAmount, Integer megaplierWinners, Long megaplierAmount, DrawResult drawResult) {
         this.match = match;
         this.winner = winner;
         this.prizeAmount = prizeAmount;

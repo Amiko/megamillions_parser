@@ -38,7 +38,7 @@ public class DrawResult implements Serializable {
 
     @OneToMany(mappedBy = "drawResult")
     @Cascade(CascadeType.SAVE_UPDATE)
-    private List<PrizeBreakDown> prizeBreakDown = new ArrayList<>();
+    private List<PrizeBreakdown> prizeBreakdown = new ArrayList<>();
 
 
     public DrawResult(Date drawDates, Integer[] balls, Integer megaBall, int megaPlier) {
@@ -89,11 +89,11 @@ public class DrawResult implements Serializable {
         this.megaPlier = megaPlier;
     }
 
-    public List<PrizeBreakDown> getPrizeBreakDown() {
-        return prizeBreakDown;
+    public List<PrizeBreakdown> getPrizeBreakdown() {
+        return prizeBreakdown;
     }
 
-    public void setPrizeBreakDown(List<PrizeBreakDown> prizeBreakDown) {
-        this.prizeBreakDown = prizeBreakDown;
+    public void setPrizeBreakdown(List<PrizeBreakdown> prizeBreakdown) {
+        this.prizeBreakdown = prizeBreakdown;
     }
 }
