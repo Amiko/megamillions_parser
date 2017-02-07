@@ -2,6 +2,7 @@ package parserSpringData.repo;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import parserSpringData.entity.DrawResult;
 import parserSpringData.entity.PrizeBreakdown;
 
 

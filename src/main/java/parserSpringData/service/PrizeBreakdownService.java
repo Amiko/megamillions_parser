@@ -28,15 +28,20 @@ public class PrizeBreakdownService {
 
     public void getPrizeBreakdown(String url, DrawResult drawResult) throws IOException {
 
-        Document doc = Jsoup.connect(url).get();
+        Document doc = getDocument(url);
 
-        PrizeBreakdown jackpotResult = getJackpotResults(doc, drawResult);
-        prizeBreakdownRepository.save(jackpotResult);
+        PrizeBreakdown jackpotPrizeBreakdown = getJackpotPrizeBreakdown(doc, drawResult);
+        prizeBreakdownRepository.save(jackpotPrizeBreakdown);
 
         List<PrizeBreakdown> prizeBreakdown = getBreakdownResults(doc,drawResult);
         prizeBreakdownRepository.save(prizeBreakdown);
     }
-    private PrizeBreakdown getJackpotResults(Document doc, DrawResult drawResult) {
+
+    protected Document getDocument(String url) throws IOException {
+        return Jsoup.connect(url).get();
+    }
+
+    private PrizeBreakdown getJackpotPrizeBreakdown(Document doc, DrawResult drawResult) {
 
         Elements tableForJacpot = getTableForJackpot(doc);
         //Parse Jackpot results.
@@ -44,8 +49,8 @@ public class PrizeBreakdownService {
         Integer tdJackpotWinner = Integer.parseInt(tableForJacpot.get(1).html());
         Long jackPotPrize = Long.parseLong(tableForJacpot.get(2).html().replaceAll("[^\\d.]+",""));
 
-        PrizeBreakdown jackpot = new PrizeBreakdown(tdMatch,tdJackpotWinner,jackPotPrize, 0, 0L, drawResult );
-        return jackpot;
+        PrizeBreakdown jackpotPrizeBreakdown = new PrizeBreakdown(tdMatch,tdJackpotWinner,jackPotPrize, 0, 0L, drawResult );
+        return jackpotPrizeBreakdown;
     }
 
     private Elements getTableForJackpot(Document doc){
