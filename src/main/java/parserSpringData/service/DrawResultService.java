@@ -84,10 +84,15 @@ public class DrawResultService {
 
     //Navigate on last 25 drawings result table.
     public Elements getTableRows() throws IOException {
-        Document doc = Jsoup.connect("http://www.megamillions.com/winning-numbers/last-25-drawings").get();
+        Document doc = getDocument();
         Element tableBody = doc.getElementsByTag("tbody").first();
         Elements rows = tableBody.getElementsByTag("tr");
 
         return rows;
+    }
+
+    protected Document getDocument() throws IOException {
+        Document doc = Jsoup.connect("http://www.megamillions.com/winning-numbers/last-25-drawings").get();
+        return doc;
     }
 }

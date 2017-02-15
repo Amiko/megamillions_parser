@@ -44,10 +44,17 @@ public class DrawResultServiceTest {
     @Before
     public void setUp() throws Exception {
 
-        File input = new File("src/test/resources/trTagTest.html");
+        File input = new File("src/test/resources/trTagTableRows.html");
         doc = Jsoup.parse(input,"UTF-8");
 
-        drawResultService = new DrawResultService();
+        drawResultService = new DrawResultService(){
+            @Override
+            protected Document getDocument() throws IOException {
+                File input = new File("src/test/resources/trTagTableRows.html");
+                Document doc = Jsoup.parse(input,"UTF-8");
+                return doc;
+            }
+        };
     }
 
     @Test
@@ -93,8 +100,10 @@ public class DrawResultServiceTest {
 
     @Ignore
     @Test
-    public void getTableRowsTest(){
+    public void getTableRowsTest() throws IOException {
+        Elements actualRows = drawResultService.getTableRows();
 
+        Elements expectedRows = new Elements();
     }
 
     @Ignore
