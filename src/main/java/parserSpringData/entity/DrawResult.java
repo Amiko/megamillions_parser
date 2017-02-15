@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,33 @@ public class DrawResult implements Serializable {
         this.megaBall = megaBall;
         this.megaPlier = megaPlier;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DrawResult)) return false;
+
+        DrawResult that = (DrawResult) o;
+
+        if (megaPlier != that.megaPlier) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (drawDates != null ? !drawDates.equals(that.drawDates) : that.drawDates != null) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(balls, that.balls)) return false;
+        if (megaBall != null ? !megaBall.equals(that.megaBall) : that.megaBall != null) return false;
+        return prizeBreakdown != null ? prizeBreakdown.equals(that.prizeBreakdown) : that.prizeBreakdown == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (drawDates != null ? drawDates.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(balls);
+        result = 31 * result + (megaBall != null ? megaBall.hashCode() : 0);
+        result = 31 * result + megaPlier;
+        result = 31 * result + (prizeBreakdown != null ? prizeBreakdown.hashCode() : 0);
+        return result;
     }
 
     public Long getId() {

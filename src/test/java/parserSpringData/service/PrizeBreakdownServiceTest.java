@@ -52,7 +52,7 @@ public class PrizeBreakdownServiceTest {
         prizeBreakdownService = new PrizeBreakdownService(){
             @Override
             protected Document getDocument(String url) throws IOException {
-                File input = new File("src/test/resources/megaMillionsParser.html");
+                File input = new File("src/test/resources/megaMillionsWinningNumbersPage.html");
                 Document doc = Jsoup.parse(input,"UTF-8");
                 return doc;
             }
