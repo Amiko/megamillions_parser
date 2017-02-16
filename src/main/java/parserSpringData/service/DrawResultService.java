@@ -21,10 +21,15 @@ import java.util.List;
  */
 @Service
 public class DrawResultService {
-    @Autowired
-    DrawResultRepository drawResultRepository;
-    @Autowired
-    PrizeBreakdownService prizeBreakdownService;
+
+    private DrawResultRepository drawResultRepository;
+    private PrizeBreakdownService prizeBreakdownService;
+
+    public DrawResultService(@Autowired DrawResultRepository drawResultRepository, @Autowired PrizeBreakdownService prizeBreakdownService) {
+        this.drawResultRepository = drawResultRepository;
+        this.prizeBreakdownService = prizeBreakdownService;
+    }
+
 
     public void getDrawResult() throws IOException {
         Elements rows = getTableRows();
@@ -50,7 +55,7 @@ public class DrawResultService {
         return url;
     }
 
-    public DrawResult parsesDrawResult(Element row){
+    public DrawResult parsesDrawResult(Element row) {
 
         Elements numberTr = row.getElementsByClass("number");
         String drawDatesForLotto = row.getElementsByClass("dates").html();

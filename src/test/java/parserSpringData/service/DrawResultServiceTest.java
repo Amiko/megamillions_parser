@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.Mockito.*;
@@ -33,21 +34,21 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class DrawResultServiceTest {
 
-
-    private DrawResultService drawResultService;
     private Document doc;
-
     @Mock
     private DrawResultRepository drawResultRepository;
     @Mock
     private PrizeBreakdownService prizeBreakdownService;
+
+    private DrawResultService drawResultService;
+
     @Before
     public void setUp() throws Exception {
 
         File input = new File("src/test/resources/trTagTableRows.html");
         doc = Jsoup.parse(input,"UTF-8");
 
-        drawResultService = new DrawResultService(){
+        drawResultService = new DrawResultService(drawResultRepository, prizeBreakdownService){
             @Override
             protected Document getDocument() throws IOException {
                 File input = new File("src/test/resources/trTagTableRows.html");
@@ -64,6 +65,27 @@ public class DrawResultServiceTest {
         String parsedURL = drawResultService.parsesURLForPrizeBreakDown(row);
 
         assertEquals("http://www.megamillions.com/winning-numbers/2-10-2017",parsedURL);
+
+    }
+
+    @Test
+    public void getTableRowsTest() throws IOException
+    {
+
+        Elements parsedRows = drawResultService.getTableRows();
+        String actualRows = parsedRows.html();
+
+        String expectedRows = "<td class=\"dates\"> 2/10/2017 </td> \n" +
+                "<td class=\"number\"> 32 </td> \n" +
+                "<td class=\"number\"> 39 </td> \n" +
+                "<td class=\"number\"> 51 </td> \n" +
+                "<td class=\"number\"> 62 </td> \n" +
+                "<td class=\"number\"> 75 </td> \n" +
+                "<td class=\"mega\"> 14 </td> \n" +
+                "<td class=\"mega\"> 5 </td> \n" +
+                "<td class=\"details\"> <a href=\"/winning-numbers/2-10-2017\">Details</a> </td>";
+
+        assertEquals(expectedRows,actualRows);
     }
 
     @Test
@@ -83,6 +105,7 @@ public class DrawResultServiceTest {
 
         Integer[] convertedArray = drawResultService.convertArray(ballSet);
 
+        assertNotEquals(new Integer[]{11,22,33,44,55},ballSet);
         assertArrayEquals(new Integer[]{11,22,33,44,55}, convertedArray);
     }
 
@@ -99,33 +122,13 @@ public class DrawResultServiceTest {
     }
 
     @Test
-    public void getTableRowsTest() throws IOException {
-
-        Elements parsedRows = drawResultService.getTableRows();
-        String actualRows = parsedRows.html();
-
-        String expectedRows = "<td class=\"dates\"> 2/10/2017 </td> \n" +
-                "<td class=\"number\"> 32 </td> \n" +
-                "<td class=\"number\"> 39 </td> \n" +
-                "<td class=\"number\"> 51 </td> \n" +
-                "<td class=\"number\"> 62 </td> \n" +
-                "<td class=\"number\"> 75 </td> \n" +
-                "<td class=\"mega\"> 14 </td> \n" +
-                "<td class=\"mega\"> 5 </td> \n" +
-                "<td class=\"details\"> <a href=\"/winning-numbers/2-10-2017\">Details</a> </td>";
-
-        assertEquals(expectedRows,actualRows);
-    }
-
-    @Ignore
-    @Test
     public void verifyGetDrawResult() throws IOException {
 
         DrawResult drawResult = new DrawResult(new Date(1486677600000L),new Integer[]{32,39,51,62,75},14,5 );
 
         drawResultService.getDrawResult();
 
-        verify(drawResultService, times(1)).getDrawResult();
+        verify(drawResultRepository, times(1)).save(drawResult);
 
     }
 

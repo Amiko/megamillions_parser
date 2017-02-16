@@ -42,6 +42,33 @@ public class PrizeBreakdown {
         this.drawResult = drawResult;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PrizeBreakdown that = (PrizeBreakdown) o;
+
+        if (match != null ? !match.equals(that.match) : that.match != null) return false;
+        if (winner != null ? !winner.equals(that.winner) : that.winner != null) return false;
+        if (prizeAmount != null ? !prizeAmount.equals(that.prizeAmount) : that.prizeAmount != null) return false;
+        if (megaplierWinners != null ? !megaplierWinners.equals(that.megaplierWinners) : that.megaplierWinners != null)
+            return false;
+        if (megaplierAmount != null ? !megaplierAmount.equals(that.megaplierAmount) : that.megaplierAmount != null)
+            return false;
+        return drawResult != null ? drawResult.equals(that.drawResult) : that.drawResult == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = match != null ? match.hashCode() : 0;
+        result = 31 * result + (winner != null ? winner.hashCode() : 0);
+        result = 31 * result + (prizeAmount != null ? prizeAmount.hashCode() : 0);
+        result = 31 * result + (megaplierWinners != null ? megaplierWinners.hashCode() : 0);
+        result = 31 * result + (megaplierAmount != null ? megaplierAmount.hashCode() : 0);
+        result = 31 * result + (drawResult != null ? drawResult.hashCode() : 0);
+        return result;
+    }
 
     public Long getId() {
         return id;
@@ -91,7 +118,6 @@ public class PrizeBreakdown {
         this.megaplierAmount = megaplierAmount;
     }
 
-    @Column
     public DrawResult getDrawResult() {
         return drawResult;
     }

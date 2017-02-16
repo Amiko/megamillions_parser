@@ -41,7 +41,7 @@ public class PrizeBreakdownService {
         return Jsoup.connect(url).get();
     }
 
-    private PrizeBreakdown getJackpotPrizeBreakdown(Document doc, DrawResult drawResult) {
+    public PrizeBreakdown getJackpotPrizeBreakdown(Document doc, DrawResult drawResult) {
 
         Elements tableForJacpot = getTableForJackpot(doc);
         //Parse Jackpot results.
@@ -53,7 +53,7 @@ public class PrizeBreakdownService {
         return jackpotPrizeBreakdown;
     }
 
-    private Elements getTableForJackpot(Document doc){
+    public Elements getTableForJackpot(Document doc){
         //Navigate on HTML for Jackpot Table.
         Element tableForJackpot = doc.getElementsByTag("tbody").first();
         Elements tbodyForJackpot = tableForJackpot.getElementsByTag("td");
@@ -61,7 +61,7 @@ public class PrizeBreakdownService {
         return tbodyForJackpot;
     }
 
-    private List<PrizeBreakdown> getBreakdownResults(Document doc, DrawResult drawResult) {
+    public List<PrizeBreakdown> getBreakdownResults(Document doc, DrawResult drawResult) {
         List<PrizeBreakdown> prizeBreakdown = new ArrayList<>();
         Elements trTags = getTableForBreakdown(doc);
         for(Element row: trTags) {
@@ -78,7 +78,7 @@ public class PrizeBreakdownService {
         return prizeBreakdown;
     }
 
-    private Elements getTableForBreakdown(Document doc) {
+    public Elements getTableForBreakdown(Document doc) {
         //Navigate on HTML for Prize Breakdown Table.
         Element tableForBreakDown = doc.getElementsByTag("tbody").last();
         Elements trTags = tableForBreakDown.getElementsByTag("tr");
