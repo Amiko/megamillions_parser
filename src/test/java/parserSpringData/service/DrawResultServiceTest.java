@@ -14,6 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.Mockito.*;
 import parserSpringData.entity.DrawResult;
 import parserSpringData.entity.PrizeBreakdown;
+import parserSpringData.repo.DrawResultRepository;
 import parserSpringData.repo.PrizeBreakdownRepository;
 
 import java.io.File;
@@ -29,18 +30,17 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
-/**
- * Created by amiko on 1/10/2017.
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class DrawResultServiceTest {
 
-    private DrawResult drawResult;
+
     private DrawResultService drawResultService;
-    private PrizeBreakdownRepository prizeBreakdownRepository;
     private Document doc;
 
+    @Mock
+    private DrawResultRepository drawResultRepository;
+    @Mock
+    private PrizeBreakdownService prizeBreakdownService;
     @Before
     public void setUp() throws Exception {
 
@@ -98,21 +98,35 @@ public class DrawResultServiceTest {
 
     }
 
-    @Ignore
     @Test
     public void getTableRowsTest() throws IOException {
-        Elements actualRows = drawResultService.getTableRows();
 
-        Elements expectedRows = new Elements();
+        Elements parsedRows = drawResultService.getTableRows();
+        String actualRows = parsedRows.html();
+
+        String expectedRows = "<td class=\"dates\"> 2/10/2017 </td> \n" +
+                "<td class=\"number\"> 32 </td> \n" +
+                "<td class=\"number\"> 39 </td> \n" +
+                "<td class=\"number\"> 51 </td> \n" +
+                "<td class=\"number\"> 62 </td> \n" +
+                "<td class=\"number\"> 75 </td> \n" +
+                "<td class=\"mega\"> 14 </td> \n" +
+                "<td class=\"mega\"> 5 </td> \n" +
+                "<td class=\"details\"> <a href=\"/winning-numbers/2-10-2017\">Details</a> </td>";
+
+        assertEquals(expectedRows,actualRows);
     }
 
     @Ignore
     @Test
     public void verifyGetDrawResult() throws IOException {
 
+        DrawResult drawResult = new DrawResult(new Date(1486677600000L),new Integer[]{32,39,51,62,75},14,5 );
+
         drawResultService.getDrawResult();
 
         verify(drawResultService, times(1)).getDrawResult();
+
     }
 
 
