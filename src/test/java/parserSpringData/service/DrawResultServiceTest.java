@@ -21,9 +21,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -36,9 +34,10 @@ public class DrawResultServiceTest {
 
     private DrawResultService drawResultService;
     private Document doc;
-
+    private DrawResult drawResult;
     @Before
     public void setUp() throws Exception {
+        drawResult = new DrawResult(new Date(1486677600000L),new Integer[]{32,39,51,62,75},14,5 );
 
         File input = new File("src/test/resources/trTagTableRows.html");
         doc = Jsoup.parse(input,"UTF-8");
@@ -46,8 +45,6 @@ public class DrawResultServiceTest {
         drawResultService = new DrawResultService(drawResultRepository, prizeBreakdownService){
             @Override
             protected Document getDocument() throws IOException {
-                File input = new File("src/test/resources/trTagTableRows.html");
-                Document doc = Jsoup.parse(input,"UTF-8");
                 return doc;
             }
         };
@@ -64,8 +61,7 @@ public class DrawResultServiceTest {
     }
 
     @Test
-    public void getTableRowsTest() throws IOException
-    {
+    public void getTableRowsTest() throws IOException {
 
         Elements parsedRows = drawResultService.getTableRows();
         String actualRows = parsedRows.html();
@@ -110,7 +106,7 @@ public class DrawResultServiceTest {
 
         DrawResult actualDrawResult = drawResultService.parsesDrawResult(row);
 
-        DrawResult expectedDrawResult = new DrawResult(new Date(1486677600000L),new Integer[]{32,39,51,62,75},14,5 );
+        DrawResult expectedDrawResult = drawResult;
 
         assertEquals(expectedDrawResult,actualDrawResult);
 
@@ -118,8 +114,6 @@ public class DrawResultServiceTest {
 
     @Test
     public void verifySave() throws IOException {
-
-        DrawResult drawResult = new DrawResult(new Date(1486677600000L),new Integer[]{32,39,51,62,75},14,5 );
 
         drawResultService.getDrawResult();
 
