@@ -45,10 +45,11 @@ public class PrizeBreakdown {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof PrizeBreakdown)) return false;
 
         PrizeBreakdown that = (PrizeBreakdown) o;
 
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (match != null ? !match.equals(that.match) : that.match != null) return false;
         if (winner != null ? !winner.equals(that.winner) : that.winner != null) return false;
         if (prizeAmount != null ? !prizeAmount.equals(that.prizeAmount) : that.prizeAmount != null) return false;
@@ -61,7 +62,8 @@ public class PrizeBreakdown {
 
     @Override
     public int hashCode() {
-        int result = match != null ? match.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (match != null ? match.hashCode() : 0);
         result = 31 * result + (winner != null ? winner.hashCode() : 0);
         result = 31 * result + (prizeAmount != null ? prizeAmount.hashCode() : 0);
         result = 31 * result + (megaplierWinners != null ? megaplierWinners.hashCode() : 0);

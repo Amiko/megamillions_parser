@@ -3,24 +3,17 @@ package parserSpringData.service;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Tag;
 import org.jsoup.select.Elements;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.Mockito.*;
 import parserSpringData.entity.DrawResult;
-import parserSpringData.entity.PrizeBreakdown;
 import parserSpringData.repo.DrawResultRepository;
-import parserSpringData.repo.PrizeBreakdownRepository;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,19 +21,21 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class DrawResultServiceTest {
 
-    private Document doc;
     @Mock
     private DrawResultRepository drawResultRepository;
     @Mock
     private PrizeBreakdownService prizeBreakdownService;
 
     private DrawResultService drawResultService;
+    private Document doc;
 
     @Before
     public void setUp() throws Exception {
@@ -122,16 +117,14 @@ public class DrawResultServiceTest {
     }
 
     @Test
-    public void verifyGetDrawResult() throws IOException {
+    public void verifySave() throws IOException {
 
         DrawResult drawResult = new DrawResult(new Date(1486677600000L),new Integer[]{32,39,51,62,75},14,5 );
 
         drawResultService.getDrawResult();
 
         verify(drawResultRepository, times(1)).save(drawResult);
-
+        verifyNoMoreInteractions(drawResultRepository);
     }
-
-
 
 }

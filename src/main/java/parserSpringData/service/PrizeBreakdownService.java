@@ -16,15 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by amiko on 29-Dec-16.
- */
 
 @Service
 public class PrizeBreakdownService {
 
-    @Autowired
+
     private PrizeBreakdownRepository prizeBreakdownRepository;
+
+    public PrizeBreakdownService(@Autowired PrizeBreakdownRepository prizeBreakdownRepository) {
+        this.prizeBreakdownRepository = prizeBreakdownRepository;
+    }
 
     public void getPrizeBreakdown(String url, DrawResult drawResult) throws IOException {
 
@@ -33,7 +34,7 @@ public class PrizeBreakdownService {
         PrizeBreakdown jackpotPrizeBreakdown = getJackpotPrizeBreakdown(doc, drawResult);
         prizeBreakdownRepository.save(jackpotPrizeBreakdown);
 
-        List<PrizeBreakdown> prizeBreakdown = getBreakdownResults(doc,drawResult);
+        List<PrizeBreakdown> prizeBreakdown = getPrizeBreakdownResults(doc,drawResult);
         prizeBreakdownRepository.save(prizeBreakdown);
     }
 
@@ -61,7 +62,7 @@ public class PrizeBreakdownService {
         return tbodyForJackpot;
     }
 
-    public List<PrizeBreakdown> getBreakdownResults(Document doc, DrawResult drawResult) {
+    public List<PrizeBreakdown> getPrizeBreakdownResults(Document doc, DrawResult drawResult) {
         List<PrizeBreakdown> prizeBreakdown = new ArrayList<>();
         Elements trTags = getTableForBreakdown(doc);
         for(Element row: trTags) {
