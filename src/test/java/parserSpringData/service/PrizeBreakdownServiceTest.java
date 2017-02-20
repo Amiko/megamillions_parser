@@ -105,8 +105,8 @@ public class PrizeBreakdownServiceTest {
     @Test
     public void getTableForBreakdownTest() throws IOException{
 
-        Elements parsedlTrTags = prizeBreakdownService.getTableForBreakdown(doc);
-        String actualTrTags = parsedlTrTags.html();
+        Elements parsedTrTags = prizeBreakdownService.getTableForBreakdown(doc);
+        String actualTrTags = parsedTrTags.html();
 
         String expectedTrTags = "<td>5 + 0</td> \n" + "<td>2</td> \n" + "<td>$1,000,000</td> \n" + "<td>0</td> \n" + "<td>$4,000,000</td>\n" +
                 "<td>4 + 1</td> \n" + "<td>29</td> \n" + "<td>$5,000</td> \n" + "<td>3</td> \n" + "<td>$20,000</td>\n" +
@@ -121,7 +121,7 @@ public class PrizeBreakdownServiceTest {
     }
 
     @Test
-    public void getTableForJacpotTest() throws IOException{
+    public void getTableForJackpotTest() throws IOException{
 
         Elements parsedTableForJackpot = prizeBreakdownService.getTableForJackpot(doc);
         String actualTableForJackpot = parsedTableForJackpot.html();
