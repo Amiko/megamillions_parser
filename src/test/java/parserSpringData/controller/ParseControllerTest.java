@@ -7,10 +7,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import parserSpringData.service.DrawResultService;
 
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static org.junit.Assert.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,6 +44,8 @@ public class ParseControllerTest {
         assertThat("Verify Response Body", response.toString().contains("test"));
         assertThat("Verify Status Code", response.getStatusCode().equals(HttpStatus.OK));
 
-        verify(getRequestedFor(urlMatching("/springData")));
+        verify(getRequestedFor(urlMatching("/springData*")));
+        verify(exactly(1), getRequestedFor(urlEqualTo("/springData")));
+
     }
 }
