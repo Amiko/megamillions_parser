@@ -93,11 +93,12 @@ public class DrawResultServiceTest {
     @Test
     public void convertArrayTest() {
         List<Integer> ballSet = new ArrayList<>(asList(11,22,33,44,55));
-
+        Integer[] ExpectedArray = new Integer[]{11,22,33,44,55};
+        
         Integer[] convertedArray = drawResultService.convertArray(ballSet);
 
-        assertNotEquals(new Integer[]{11,22,33,44,55},ballSet);
-        assertArrayEquals(new Integer[]{11,22,33,44,55}, convertedArray);
+        assertNotEquals(ExpectedArray,ballSet);
+        assertArrayEquals(ExpectedArray, convertedArray);
     }
 
     @Test
