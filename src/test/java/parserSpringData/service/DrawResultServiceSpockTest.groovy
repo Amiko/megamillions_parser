@@ -29,7 +29,16 @@ class DrawResultServiceSpockTest extends Specification {
                 }
             }
         }
+    def "verify-interaction-on-save"(){
+        given:
 
+        when:
+        drawResultService.getDrawResult();
+
+        then:
+        1 * drawResultRepository.save(drawResult)
+        0 * drawResultRepository.save(drawResult)
+    }
     def "url-parse-test"(){
 
         given: "some rows for test"
