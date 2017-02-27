@@ -29,8 +29,8 @@ import static org.mockito.Mockito.*;
 public class PrizeBreakdownServiceTest {
 
     private DrawResult drawResult;
-    private String url;
     private Document doc;
+    private String url;
     private List<PrizeBreakdown> prizeBreakdown;
     private PrizeBreakdown jackpotPrizeBreakdown;
     @Mock
