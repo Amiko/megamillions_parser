@@ -35,9 +35,9 @@ class PrizeBreakdownServiceSpockTest extends Specification {
         prizeBreakdown << new PrizeBreakdown("5 + 0",2,1000000L,0,4000000L,drawResult)
         prizeBreakdown << new PrizeBreakdown("4 + 1",29,5000L,3,20000L,drawResult)
         prizeBreakdown << new PrizeBreakdown("4 + 0",412,500L,58,2000L,drawResult)
+        prizeBreakdown << new PrizeBreakdown("3 + 1",2002,50L,229,200L,drawResult)
         prizeBreakdown << new PrizeBreakdown("3 + 0",27852,5L,3046,20L,drawResult)
         prizeBreakdown << new PrizeBreakdown("2 + 1",46742,5L,5077,20L,drawResult)
-        prizeBreakdown << new PrizeBreakdown("3 + 1",2002,50L,229,200L,drawResult)
         prizeBreakdown << new PrizeBreakdown("1 + 1",413861,2L,46158,8L,drawResult)
         prizeBreakdown << new PrizeBreakdown("0 + 1",1132284,1L,128342,4L,drawResult)
 
